@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Domain;
+namespace App\Domains\Migration\Actions;
 
 class CollectDatabaseInfoAction
 {
