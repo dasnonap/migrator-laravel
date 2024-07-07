@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Domains\Migration\Http\Controllers;
 
-use App\Models\MigrationRecord;
+use App\Domains\Migration\Actions\ImportDatabaseMigrationAction;
+use App\Domains\Migration\Models\MigrationRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class MigrationRecordsController extends Controller
+class MigrationRecordsController
 {
-    //
+    function __construct(public ImportDatabaseMigrationAction $importDatabaseAction)
+    {
+    }
+
+    // Handle Create Endpoint
     function create(Request $request)
     {
         $file = $request->file('file');
@@ -28,7 +33,7 @@ class MigrationRecordsController extends Controller
 
         $migrationRecord->save();
 
-        $filePath = app('App\Actions\Domain\ImportDatabaseMigrationAction')->handle($file);
+        $filePath = $this->importDatabaseAction->handle($file);
 
         dd($filePath);
 
