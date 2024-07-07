@@ -7,6 +7,7 @@ use App\Domains\Migration\ValueObjects\ImportedMigration;
 use Ramsey\Collection\Collection;
 use App\Domains\Migration\ValueObjects\MigrationTable;
 use App\Domains\Migration\ValueObjects\MigrationData;
+use Illuminate\Support\Str;
 
 class CollectDatabaseInfoAction
 {
@@ -14,6 +15,11 @@ class CollectDatabaseInfoAction
     {
     }
 
+    /**
+     * Collect all needed data for the migration 
+     * @param ImportedMigration $migration instance of recently imported migration
+     * @return MigrationData collected data 
+     */
     function handle(ImportedMigration $importedMigration)
     {
         $reader = new FileReader($importedMigration->filePath);
@@ -27,18 +33,17 @@ class CollectDatabaseInfoAction
                 continue;
             }
 
-            $tableCollection->add(MigrationTable::from([
-                'name' => $table,
-                'fileIndex' => $reader->getFilePointerIndex()
-            ]));
+            $tableCollection->add($table);
         }
 
         $reader->close();
 
-        return MigrationData::from([
+        $migrationData = MigrationData::from([
             'tablesFound' => $tableCollection->count(),
             'tables' => $tableCollection
         ]);
+
+        return $this->filterPrefixes($migrationData);
     }
 
     function getTable($text)
@@ -49,6 +54,28 @@ class CollectDatabaseInfoAction
 
         preg_match("/`(?<table>.*)`/", $text, $matches);
 
-        return $matches['table'];
+        return MigrationTable::from([
+            'name' => $matches['table'],
+            'prefix' => Str::of($matches['table'])->split('/_/')->first()
+        ]);
+    }
+
+    function filterPrefixes(MigrationData $migration)
+    {
+        if (empty($migration->tables)) {
+            return;
+        }
+
+        $prefixes = $migration->tables->map(function (MigrationTable $table) {
+            return $table->prefix;
+        });
+
+        if ($prefixes->count() <= 2) {
+            return $migration;
+        }
+
+        // To DO test with multiple tables
+        // logic select unique prefixes only 
+        dd($prefixes);
     }
 }

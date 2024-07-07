@@ -8,7 +8,8 @@ class MigrationTable extends Data
 {
     function __construct(
         public string $name,
-        public int $fileIndex,
+        // public int $fileIndex,
+        public string|null $prefix,
     ) {
     }
 }

@@ -10,6 +10,7 @@ class FileReader
     private $fileHandler;
     private $storagePath;
     private $fullFilePath;
+    private $lineStartIndex;
 
     function __construct(
         public string $filePath
@@ -30,18 +31,16 @@ class FileReader
         if (empty($this->fileHandler)) {
             throw new FileNotInitializedException("File couldn't be opened properly.");
         }
+        // Save Line start index
+        $this->lineStartIndex = ftell($this->fileHandler);
 
         return fgets($this->fileHandler);
     }
 
     // Get File Index
-    function getFilePointerIndex()
+    function getLineStartIndex()
     {
-        if (empty($this->fileHandler)) {
-            return null;
-        }
-
-        return ftell($this->fileHandler);
+        return $this->lineStartIndex;
     }
 
     // Close file 
