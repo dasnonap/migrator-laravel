@@ -34,6 +34,16 @@ class FileReader
         return fgets($this->fileHandler);
     }
 
+    // Get File Index
+    function getFilePointerIndex()
+    {
+        if (empty($this->fileHandler)) {
+            return null;
+        }
+
+        return ftell($this->fileHandler);
+    }
+
     // Close file 
     function close()
     {
