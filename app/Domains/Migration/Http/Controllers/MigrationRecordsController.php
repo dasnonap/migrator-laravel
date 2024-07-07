@@ -2,6 +2,7 @@
 
 namespace App\Domains\Migration\Http\Controllers;
 
+use App\Domains\Migration\Actions\CollectDatabaseInfoAction;
 use App\Domains\Migration\Actions\ImportDatabaseMigrationAction;
 use App\Domains\Migration\Models\MigrationRecord;
 use Illuminate\Http\Request;
@@ -9,8 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class MigrationRecordsController
 {
-    function __construct(public ImportDatabaseMigrationAction $importDatabaseAction)
-    {
+    function __construct(
+        public ImportDatabaseMigrationAction $importDatabaseAction,
+        public CollectDatabaseInfoAction $collectInfoAction,
+    ) {
     }
 
     // Handle Create Endpoint
@@ -31,6 +34,7 @@ class MigrationRecordsController
 
         $migration = $this->importDatabaseAction->handle($file);
 
-        dd($migration);
+        $migrationInfo = $this->collectInfoAction->handle($migration);
+        dd($migrationInfo);
     }
 }
