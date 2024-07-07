@@ -29,16 +29,8 @@ class MigrationRecordsController
             return response()->json(['File type needs to be SQL', 422]);
         }
 
-        $migrationRecord = new MigrationRecord([]);
+        $migration = $this->importDatabaseAction->handle($file);
 
-        $migrationRecord->save();
-
-        $filePath = $this->importDatabaseAction->handle($file);
-
-        dd($filePath);
-
-        // response()->stream(function(){
-
-        // });
+        dd($migration);
     }
 }
