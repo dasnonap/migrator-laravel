@@ -1,6 +1,6 @@
 <?php
 
-use App\Domains\Migration\Http\Controllers\MigrationRecordsController;
+use App\Http\Migration\Controllers\MigrationRecordsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

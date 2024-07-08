@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domains\Migration\Http\Controllers;
+namespace App\Http\Migration\Controllers;
 
 use App\Domains\Migration\Actions\CollectDatabaseInfoAction;
 use App\Domains\Migration\Actions\ImportDatabaseMigrationAction;
