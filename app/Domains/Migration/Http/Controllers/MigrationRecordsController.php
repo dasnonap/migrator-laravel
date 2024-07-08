@@ -4,7 +4,6 @@ namespace App\Domains\Migration\Http\Controllers;
 
 use App\Domains\Migration\Actions\CollectDatabaseInfoAction;
 use App\Domains\Migration\Actions\ImportDatabaseMigrationAction;
-use App\Domains\Migration\Models\MigrationRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,6 +34,7 @@ class MigrationRecordsController
         $migration = $this->importDatabaseAction->handle($file);
 
         $migrationInfo = $this->collectInfoAction->handle($migration);
-        dd($migrationInfo);
+
+        return response()->json($migrationInfo->toArray(), 200);
     }
 }

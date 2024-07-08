@@ -4,8 +4,8 @@ namespace App\Domains\Migration\Actions;
 
 use App\Domains\Migration\Services\FileReader;
 use App\Domains\Migration\ValueObjects\ImportedMigration;
-use Ramsey\Collection\Collection;
 use App\Domains\Migration\ValueObjects\MigrationTable;
+use Illuminate\Support\Collection;
 use App\Domains\Migration\ValueObjects\MigrationData;
 use Illuminate\Support\Str;
 
@@ -23,7 +23,7 @@ class CollectDatabaseInfoAction
     function handle(ImportedMigration $importedMigration)
     {
         $reader = new FileReader($importedMigration->filePath);
-        $tableCollection = new Collection(MigrationTable::class);
+        $tableCollection = new Collection();
         $reader->open();
 
         while ($line = $reader->nextLine()) {
@@ -43,7 +43,9 @@ class CollectDatabaseInfoAction
             'tables' => $tableCollection
         ]);
 
-        return $this->filterPrefixes($migrationData);
+        $migrationData->prefixes = $this->filterPrefixes($migrationData);
+
+        return $migrationData;
     }
 
     function getTable($text)
@@ -63,19 +65,14 @@ class CollectDatabaseInfoAction
     function filterPrefixes(MigrationData $migration)
     {
         if (empty($migration->tables)) {
-            return;
+            return null;
         }
 
-        $prefixes = $migration->tables->map(function (MigrationTable $table) {
-            return $table->prefix;
-        });
-
-        if ($prefixes->count() <= 2) {
-            return $migration;
+        // If table count is smaller than 2 -- Skip
+        if ($migration->tables->count() <= 2) {
+            return null;
         }
 
-        // To DO test with multiple tables
-        // logic select unique prefixes only 
-        dd($prefixes);
+        return collect($migration->tables->toArray())->pluck('prefix')->unique();
     }
 }
