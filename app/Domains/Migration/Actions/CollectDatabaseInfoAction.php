@@ -73,6 +73,6 @@ class CollectDatabaseInfoAction
             return null;
         }
 
-        return collect($migration->tables->toArray())->pluck('prefix')->unique();
+        return $migration->tables->pluck('prefix')->unique();
     }
 }
