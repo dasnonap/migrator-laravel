@@ -5,7 +5,7 @@ namespace App\Domains\Migration\Exceptions;
 use Exception;
 use Throwable;
 
-class EmptyFileException extends Exception
+class FileNotInitializedException extends Exception
 {
     function __construct(string $message, int $code = 0, Throwable $previous = null)
     {
