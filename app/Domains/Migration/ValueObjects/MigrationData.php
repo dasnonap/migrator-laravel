@@ -13,4 +13,20 @@ class MigrationData extends Data
         public Collection|null $prefixes,
     ) {
     }
+
+    /**
+     * Initialize using Json data
+     * @param string $jsonData 
+     * @return MigrationData instance
+     */
+    static function fromJson(string $jsonData)
+    {
+        $jsonData = json_decode($jsonData, true);
+
+        return new self(
+            tablesFound: $jsonData['tablesFound'] ?? null,
+            tables: collect($jsonData['tables']) ?? null,
+            prefixes: collect($jsonData['prefixes']) ?? null
+        );
+    }
 }
