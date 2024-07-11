@@ -1,11 +1,15 @@
 <?php
 
-namespace App\Domains\Migration\Actions;
+namespace App\Support;
 
 use Illuminate\Support\Facades\Cache;
 
-class CacheDataAction
+class CacheData
 {
+    function __construct()
+    {
+    }
+
     function handle($key, $data)
     {
         return Cache::put($key, $data, 600);

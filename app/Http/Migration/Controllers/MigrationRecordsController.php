@@ -2,7 +2,7 @@
 
 namespace App\Http\Migration\Controllers;
 
-use App\Domains\Migration\Actions\CacheDataAction;
+use App\Domains\Migration\Actions\CacheMigrationDataAction;
 use App\Domains\Migration\Actions\CollectDatabaseInfoAction;
 use App\Domains\Migration\Actions\ImportDatabaseMigrationAction;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class MigrationRecordsController
     function __construct(
         public ImportDatabaseMigrationAction $importDatabaseAction,
         public CollectDatabaseInfoAction $collectInfoAction,
-        public CacheDataAction $cacheDataAction,
+        public CacheMigrationDataAction $cacheMigrationData,
     ) {
     }
 
@@ -37,12 +37,8 @@ class MigrationRecordsController
 
         $migrationInfo = $this->collectInfoAction->handle($migration);
 
-        $this->cacheDataAction->handle($migration->uuid, $migrationInfo->toJson());
-        // $result = session($migration->uuid, [
-        //     'migration' => $migration,
-        //     'info' => $migrationInfo
-        // ]);
-
+        // Cache Data
+        $this->cacheMigrationData->handle($migration, $migrationInfo);
 
         return response()->json([
             'id' => $migration->uuid,

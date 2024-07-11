@@ -19,4 +19,11 @@ class ImportedMigration extends Data
     {
         return new self($record->id, $path, $record->created_at);
     }
+
+    static function fromJson(string $json)
+    {
+        $jsonData = json_decode($json, true);
+
+        return self::from($jsonData);
+    }
 }

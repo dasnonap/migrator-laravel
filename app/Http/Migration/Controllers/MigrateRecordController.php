@@ -21,14 +21,14 @@ class MigrateRecordController
             throw new LogicException('Migration ID is empty.');
         }
 
-        $migrationInfo = $this->searchAction->handle($migrationId);
+        $data = $this->searchAction->handle($migrationId);
 
-        if (empty($migrationInfo)) {
+        if (empty($data)) {
             response()->json([
                 'error' => "Persisted Migration data lost. Please re-upload file."
             ], 500);
         }
 
-        dd($migrationInfo);
+        dd($data);
     }
 }
