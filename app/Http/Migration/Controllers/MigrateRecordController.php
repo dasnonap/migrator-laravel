@@ -3,6 +3,8 @@
 namespace App\Http\Migration\Controllers;
 
 use App\Domains\Migration\Actions\GetCacheDataAction;
+use App\Domains\Migration\ValueObjects\ImportedMigration;
+use App\Domains\Migration\ValueObjects\MigrationData;
 use Illuminate\Http\Request;
 use LogicException;
 
@@ -21,14 +23,14 @@ class MigrateRecordController
             throw new LogicException('Migration ID is empty.');
         }
 
-        $data = $this->searchAction->handle($migrationId);
+        $migration = ImportedMigration::fromCache($migrationId);
+        $migrationData = MigrationData::fromCache($migrationId);
 
-        if (empty($data)) {
+        if (empty($migration) || empty($migrationData)) {
             response()->json([
                 'error' => "Persisted Migration data lost. Please re-upload file."
             ], 500);
         }
-
-        dd($data);
+        dd($migration, $migrationData);
     }
 }

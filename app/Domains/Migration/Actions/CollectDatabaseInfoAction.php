@@ -39,6 +39,7 @@ class CollectDatabaseInfoAction
         $reader->close();
 
         $migrationData = MigrationData::from([
+            'migrationId' => $importedMigration->uuid,
             'tablesFound' => $tableCollection->count(),
             'tables' => $tableCollection
         ]);

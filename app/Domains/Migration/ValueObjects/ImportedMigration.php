@@ -2,11 +2,14 @@
 
 namespace App\Domains\Migration\ValueObjects;
 
+use App\Domains\Migration\Interfaces\CachebleInterface;
 use App\Domains\Migration\Models\MigrationRecord;
+use App\Support\CacheData;
 use Carbon\Carbon;
 use Spatie\LaravelData\Data;
+use Illuminate\Support\Facades\Cache;
 
-class ImportedMigration extends Data
+class ImportedMigration extends Data implements CachebleInterface
 {
     function __construct(
         public string $uuid,
@@ -25,5 +28,15 @@ class ImportedMigration extends Data
         $jsonData = json_decode($json, true);
 
         return self::from($jsonData);
+    }
+
+    function cache()
+    {
+        (new CacheData)->handle($this->uuid, $this->toJson());
+    }
+
+    static function fromCache(string $cacheId)
+    {
+        return self::fromJson(Cache::get($cacheId));
     }
 }
