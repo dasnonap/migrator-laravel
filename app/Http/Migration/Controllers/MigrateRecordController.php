@@ -2,7 +2,6 @@
 
 namespace App\Http\Migration\Controllers;
 
-use App\Domains\Migration\Actions\GetCacheDataAction;
 use App\Domains\Migration\ValueObjects\ImportedMigration;
 use App\Domains\Migration\ValueObjects\MigrationData;
 use Illuminate\Http\Request;
@@ -10,9 +9,8 @@ use LogicException;
 
 class MigrateRecordController
 {
-    function __construct(
-        public GetCacheDataAction $searchAction,
-    ) {
+    function __construct()
+    {
     }
 
     function migrate(Request $request)
