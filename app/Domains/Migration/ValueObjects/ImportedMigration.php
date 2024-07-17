@@ -37,6 +37,12 @@ class ImportedMigration extends Data implements CachebleInterface
 
     static function fromCache(string $cacheId)
     {
-        return self::fromJson(Cache::get($cacheId));
+        $jsonString = Cache::get($cacheId);
+
+        if (empty($jsonString)) {
+            return null;
+        }
+
+        return self::fromJson($jsonString);
     }
 }

@@ -25,7 +25,7 @@ class MigrateRecordController
         $migrationData = MigrationData::fromCache($migrationId);
 
         if (empty($migration) || empty($migrationData)) {
-            response()->json([
+            return response()->json([
                 'error' => "Persisted Migration data lost. Please re-upload file."
             ], 500);
         }

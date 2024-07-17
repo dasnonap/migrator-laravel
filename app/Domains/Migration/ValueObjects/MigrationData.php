@@ -45,7 +45,12 @@ class MigrationData extends Data implements CachebleInterface
     static function fromCache(string $migrationId)
     {
         $cacheId = sprintf('%s_data', $migrationId);
+        $jsonString = Cache::get($cacheId);
 
-        return self::fromJson(Cache::get($cacheId));
+        if (empty($jsonString)) {
+            return null;
+        }
+
+        return self::fromJson($jsonString);
     }
 }
