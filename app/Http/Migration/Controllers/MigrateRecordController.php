@@ -2,20 +2,30 @@
 
 namespace App\Http\Migration\Controllers;
 
+use App\Domains\Migration\Actions\SearchReplaceAction;
 use App\Domains\Migration\ValueObjects\ImportedMigration;
 use App\Domains\Migration\ValueObjects\MigrationData;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use LogicException;
 
 class MigrateRecordController
 {
-    function __construct()
-    {
+    function __construct(
+        public SearchReplaceAction $searchReplaceAction
+    ) {
     }
 
     function migrate(Request $request)
     {
+        $request->validate([
+            'id' => 'required|string',
+            'type' => 'required|string'
+        ]);
         $migrationId = $request->id;
+        $type = $request->type;
+        $search = $request->search;
+        $replace = $request->replace;
 
         if (empty($migrationId)) {
             throw new LogicException('Migration ID is empty.');
@@ -27,8 +37,13 @@ class MigrateRecordController
         if (empty($migration) || empty($migrationData)) {
             return response()->json([
                 'error' => "Persisted Migration data lost. Please re-upload file."
-            ], 500);
+            ], 422);
         }
-        dd($migration, $migrationData);
+
+        $migratedRecord = $this->searchReplaceAction->handle($migration, $search, $replace);
+        return Storage::download($migratedRecord->filePath, 'migration', [
+            'Content-Type' => 'application/sql',
+            // 'Content-Disposition' => 'attachment;filename=migration'
+        ]);
     }
 }

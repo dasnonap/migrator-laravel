@@ -45,4 +45,9 @@ class ImportedMigration extends Data implements CachebleInterface
 
         return self::fromJson($jsonString);
     }
+
+    // function migrationFileName()
+    // {
+    //     return sprintf("%s", $this->filePath);
+    // }
 }
