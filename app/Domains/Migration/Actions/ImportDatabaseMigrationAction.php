@@ -2,7 +2,7 @@
 
 namespace App\Domains\Migration\Actions;
 
-use App\Exceptions\EmptyFileException;
+use App\Domains\Migration\Exceptions\EmptyFileException;
 use App\Domains\Migration\Models\MigrationRecord;
 use App\Domains\Migration\ValueObjects\ImportedMigration;
 use Illuminate\Http\UploadedFile;
@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImportDatabaseMigrationAction
 {
-    function __construct()
-    {
-    }
+    function __construct() {}
 
     function handle(UploadedFile $file)
     {

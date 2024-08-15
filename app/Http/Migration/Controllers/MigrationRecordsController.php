@@ -12,8 +12,7 @@ class MigrationRecordsController
     function __construct(
         public ImportDatabaseMigrationAction $importDatabaseAction,
         public CollectDatabaseInfoAction $collectInfoAction,
-    ) {
-    }
+    ) {}
 
     // Handle Create Endpoint
     function create(Request $request)
@@ -22,7 +21,7 @@ class MigrationRecordsController
         $file = $request->file;
 
         Validator::validate($request->all(), [
-            'file' => 'required|file|mimes:txt',
+            'file' => 'required|file',
         ]);
 
         // Validate Client MimeType is SQL 
