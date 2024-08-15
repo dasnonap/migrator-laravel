@@ -35,6 +35,13 @@ class MigrationRecordsController
 
         $migrationInfo = $this->collectInfoAction->handle($migration);
 
-        return response()->json($migrationInfo->toArray(), 200);
+        // Cache Data
+        $migration->cache();
+        $migrationInfo->cache();
+
+        return response()->json([
+            'id' => $migration->uuid,
+            'tableInfo' => $migrationInfo->toArray()
+        ], 200);
     }
 }
