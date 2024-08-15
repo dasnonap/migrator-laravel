@@ -23,7 +23,6 @@ class MigrateRecordController
             'type' => 'required|string'
         ]);
         $migrationId = $request->id;
-        $type = $request->type;
         $search = $request->search;
         $replace = $request->replace;
 
@@ -43,7 +42,6 @@ class MigrateRecordController
         $migratedRecord = $this->searchReplaceAction->handle($migration, $search, $replace);
         return Storage::download($migratedRecord->filePath, 'migration', [
             'Content-Type' => 'application/sql',
-            // 'Content-Disposition' => 'attachment;filename=migration'
         ]);
     }
 }

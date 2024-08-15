@@ -24,7 +24,6 @@ class FileWriter
 
     function writeLine($line)
     {
-        // dd($line, 'writing');
         return fwrite($this->handler, $line);
     }
 

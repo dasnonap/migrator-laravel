@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class SearchReplaceAction
 {
-    function __construct()
-    {
-    }
+    function __construct() {}
 
     function handle(
         ImportedMigration $migration,

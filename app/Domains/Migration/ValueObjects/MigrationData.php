@@ -51,6 +51,8 @@ class MigrationData extends Data implements CachebleInterface
             return null;
         }
 
+        (new CacheData)->handle($cacheId, $jsonString);
+
         return self::fromJson($jsonString);
     }
 }
